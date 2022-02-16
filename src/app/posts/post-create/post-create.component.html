@@ -1,1 +1,7 @@
-<p>post-create works!</p>
+<mat-card style="width: 80%; margin: auto">
+  <mat-form-field>
+    <textarea matInput rows="6" #postInput></textarea>
+  </mat-form-field>
+  <button mat-raised-button color="accent" (click)="onAddPost(postInput)">Save Post</button>
+</mat-card>
+<p>{{ newPost }}</p>
