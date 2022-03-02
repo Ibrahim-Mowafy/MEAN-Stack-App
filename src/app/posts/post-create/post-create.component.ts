@@ -1,4 +1,3 @@
-import { Post } from './../post.model';
 import { PostService } from './../posts.service';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
