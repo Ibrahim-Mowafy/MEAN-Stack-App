@@ -1,7 +1,7 @@
 const express = require("express");
 const Post = require("../models/post");
 const multer = require("multer");
-const routes = express.Router();
+const router = express.Router();
 
 const MIME_TYPE_MAP = {
   "image/png": "png",
@@ -27,7 +27,7 @@ const storage = multer.diskStorage({
   },
 });
 
-routes.post(
+router.post(
   "",
   multer({ storage: storage }).single("image"),
   (req, res, next) => {
@@ -48,7 +48,7 @@ routes.post(
     });
   }
 );
-routes.get("/:id", (req, res, next) => {
+router.get("/:id", (req, res, next) => {
   Post.findById(req.params.id).then((post) => {
     if (post) {
       res.status(200).json(post);
@@ -58,7 +58,7 @@ routes.get("/:id", (req, res, next) => {
   });
 });
 
-routes.put(
+router.put(
   "/:id",
   multer({ storage: storage }).single("image"),
   (req, res, next) => {
@@ -81,7 +81,7 @@ routes.put(
   }
 );
 
-routes.get("", (req, res, next) => {
+router.get("", (req, res, next) => {
   const pageSize = +req.query.pagesize;
   const currentPage = +req.query.page;
   const postQuery = Post.find();
@@ -106,11 +106,11 @@ routes.get("", (req, res, next) => {
     });
 });
 
-routes.delete("/:id", (req, res, next) => {
+router.delete("/:id", (req, res, next) => {
   Post.deleteOne({ _id: req.params.id }).then((result) => {
     console.log(result);
     res.status(200).json({ message: "Post deleted!" });
   });
 });
 
-module.exports = routes;
+module.exports = router;
