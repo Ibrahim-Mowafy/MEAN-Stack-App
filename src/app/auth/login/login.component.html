@@ -31,6 +31,14 @@
         Please enter a valid password.
       </mat-error>
     </mat-form-field>
-    <button mat-raised-button color="accent" type="submit">Login</button>
+    <button
+      mat-raised-button
+      color="accent"
+      type="submit"
+      style="margin-top: 7px"
+      [disabled]="loginForm.invalid"
+    >
+      Login
+    </button>
   </form>
 </mat-card>
