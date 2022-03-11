@@ -1,5 +1,7 @@
+import { AuthService } from './../../auth/auth.service';
+import { Subscription } from 'rxjs';
 import { PostService } from './../posts.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { mimeType } from './mime-type.validator';
@@ -9,7 +11,7 @@ import { mimeType } from './mime-type.validator';
   templateUrl: './post-create.component.html',
   styleUrls: ['./post-create.component.css'],
 })
-export class PostCreateComponent implements OnInit {
+export class PostCreateComponent implements OnInit, OnDestroy {
   enteredTitle = '';
   enteredContent = '';
   post: any;
@@ -18,13 +20,19 @@ export class PostCreateComponent implements OnInit {
   private postId!: string;
   form!: FormGroup;
   imagePreview: string = '';
-
+  private authStatusSub: Subscription | undefined;
   constructor(
     private postService: PostService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private AuthService: AuthService
   ) {}
 
   ngOnInit(): void {
+    this.authStatusSub = this.AuthService.getAuthStatusListener().subscribe(
+      (authStatus) => {
+        this.isLoading = false;
+      }
+    );
     this.form = new FormGroup({
       title: new FormControl(null, [
         Validators.required,
@@ -92,5 +100,8 @@ export class PostCreateComponent implements OnInit {
       );
     }
     this.form.reset();
+  }
+  ngOnDestroy(): void {
+    this.authStatusSub?.unsubscribe();
   }
 }
